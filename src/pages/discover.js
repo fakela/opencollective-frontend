@@ -96,6 +96,7 @@ function useCollectives(query) {
 
 const DiscoverPage = ({ router }) => {
   const { query, pathname } = router;
+  console.log(router);
   const { collectives, offset, total, show, sort, tags = [] } = useCollectives(query);
   const tagOptions = ['all'].concat(tags.map(tag => tag.toLowerCase()).sort());
   const limit = 12;
@@ -117,10 +118,9 @@ const DiscoverPage = ({ router }) => {
 
   const collectiveChecks = {};
 
-  collectiveChecks.isPledge = () => pathname.includes('/discover?offset=0&show=pledge');
-  collectiveChecks.isOpenSource = () => pathname.includes('/discover?offset=0&show=open%20source');
-  collectiveChecks.isOther = () => pathname.includes('/discover?offset=0&show=other');
-
+  collectiveChecks.isPledge = () => router.asPath.includes('/discover?offset=0&show=pledge');
+  collectiveChecks.isOpenSource = () => router.asPath.includes('/discover?offset=0&show=open%20source');
+  collectiveChecks.isOther = () => router.asPath.includes('/discover?offset=0&show=other');
   return (
     <Page title="Discover">
       {({ LoggedInUser }) => (

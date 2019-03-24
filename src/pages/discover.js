@@ -115,6 +115,12 @@ const DiscoverPage = ({ router }) => {
     });
   };
 
+  const collectiveChecks = {};
+
+  collectiveChecks.isPledge = () => pathname.includes('/discover?offset=0&show=pledge');
+  collectiveChecks.isOpenSource = () => pathname.includes('/discover?offset=0&show=open%20source');
+  collectiveChecks.isOther = () => pathname.includes('/discover?offset=0&show=other');
+
   return (
     <Page title="Discover">
       {({ LoggedInUser }) => (
@@ -204,7 +210,7 @@ const DiscoverPage = ({ router }) => {
                   {collectives.map(c => {
                     return (
                       <Flex key={c.id} width={[1, 1 / 2, 1 / 4]} mb={3} justifyContent="center">
-                        {pathname.includes('/discover?offset=0&show=pledge') ? (
+                        {collectiveChecks.isPledge() ? (
                           <PledgedCollectiveCard collective={c} LoggedInUser={LoggedInUser} />
                         ) : (
                           <CollectiveCard collective={c} LoggedInUser={LoggedInUser} />

@@ -13,13 +13,14 @@ import Link from 'next/link';
 import { FormattedMessage } from 'react-intl';
 import { Box, Flex } from '@rebass/grid';
 
-import CollectiveCard from '../components/CollectiveCard';
 import Container from '../components/Container';
 import Page from '../components/Page';
 import { H1, P } from '../components/Text';
 import LoadingGrid from '../components/LoadingGrid';
 import Pagination from '../components/Pagination';
 import SearchForm from '../components/SearchForm';
+
+import CollectiveCard from '../components/CollectiveCard';
 import PledgedCollectiveCard from '../components/PledgeCollectiveCard';
 
 const NavList = styled(Flex)`
@@ -36,7 +37,7 @@ const SelectWrapper = styled.select`
 
 const Nava = styled.a`
   color: grey;
-   :hover {
+  :hover {
     color: blue;
     cursor: pointer;
   }
@@ -47,10 +48,10 @@ const SearchFormContainer = styled(Box)`
   padding: 64px;
 `;
 const SearchInput = styled(Box)`
-    appearance: none;
-    background-color: white;
-    font-size: 1.2rem;
-    letter-spacing: 0.1rem;
+  appearance: none;
+  background-color: white;
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
 `;
 
 const _transformData = collective => ({
@@ -95,7 +96,7 @@ function useCollectives(query) {
 }
 
 const DiscoverPage = ({ router }) => {
-  const { query, pathname } = router;
+  const { query } = router;
   const { collectives, offset, total, show, sort, tags = [] } = useCollectives(query);
   const tagOptions = ['all'].concat(tags.map(tag => tag.toLowerCase()).sort());
   const limit = 12;
@@ -117,10 +118,9 @@ const DiscoverPage = ({ router }) => {
 
   const collectiveChecks = {};
 
-  collectiveChecks.isPledge = () => pathname.includes('/discover?offset=0&show=pledge');
-  collectiveChecks.isOpenSource = () => pathname.includes('/discover?offset=0&show=open%20source');
-  collectiveChecks.isOther = () => pathname.includes('/discover?offset=0&show=other');
-
+  collectiveChecks.isPledge = () => router.asPath.includes('/discover?offset=0&show=pledged');
+  collectiveChecks.isOpenSource = () => router.asPath.includes('/discover?offset=0&show=open%20source');
+  collectiveChecks.isOther = () => router.asPath.includes('/discover?offset=0&show=other');
 
   return (
     <Page title="Discover">
@@ -208,12 +208,15 @@ const DiscoverPage = ({ router }) => {
             {collectives && (
               <Fragment>
                 <Flex flexWrap="wrap" width={1} justifyContent="center">
-                  {
-                    collectives.map(c => {
-                    return (<Flex key={c.id} width={[1, 1 / 2, 1 / 4]} mb={3} justifyContent="center">
-                      <CollectiveCard collective={c} LoggedInUser={LoggedInUser} />
-                      <PledgedCollectiveCard collective={c} LoggedInUser={LoggedInUser} />
-                            </Flex>
+                  {collectives.map(c => {
+                    return (
+                      <Flex key={c.id} width={[1, 1 / 2, 1 / 4]} mb={3} justifyContent="center">
+                        {collectiveChecks.isPledge() ? (
+                          <PledgedCollectiveCard collective={c} LoggedInUser={LoggedInUser} />
+                        ) : (
+                          <CollectiveCard collective={c} LoggedInUser={LoggedInUser} />
+                        )}
+                      </Flex>
                     );
                   })}
                 </Flex>

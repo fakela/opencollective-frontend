@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import fetch from 'node-fetch';
 import { pick } from 'lodash';
 
+
 import { withRouter } from 'next/router';
 import withIntl from '../lib/withIntl';
 
@@ -19,6 +20,7 @@ import { H1, P } from '../components/Text';
 import LoadingGrid from '../components/LoadingGrid';
 import Pagination from '../components/Pagination';
 import SearchForm from '../components/SearchForm';
+import StyledLink from '../components/StyledLink';
 
 import CollectiveCard from '../components/CollectiveCard';
 import PledgedCollectiveCard from '../components/PledgeCollectiveCard';
@@ -35,16 +37,10 @@ const SelectWrapper = styled.select`
   border: 1px solid silver;
 `;
 
-const Nava = styled.a`
-  color: grey;
-  :hover {
-    color: blue;
-    cursor: pointer;
-  }
-`;
+
 const SearchFormContainer = styled(Box)`
-  max-width: 30rem;
-  min-width: 83rem;
+  max-width: 100%;
+  width: 100rem;
   padding: 64px;
 `;
 const SearchInput = styled(Box)`
@@ -97,7 +93,7 @@ function useCollectives(query) {
 
 const DiscoverPage = ({ router }) => {
   const { query } = router;
-  const { collectives, offset, total, show, sort, tags = [] } = useCollectives(query);
+  const { collectives, offset, total, show, tags = [] } = useCollectives(query);
   const tagOptions = ['all'].concat(tags.map(tag => tag.toLowerCase()).sort());
   const limit = 12;
 
@@ -109,12 +105,12 @@ const DiscoverPage = ({ router }) => {
     });
   };
 
-  const onLoadCollectives = (e, value) => {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, offset: 0, show: value },
-    });
-  };
+  // const onLoadCollectives = (e, value) => {
+  // router.push({
+  // pathname: router.pathname,
+  // query: { ...router.query, offset: 0, show: value },
+  // });
+  // };
 
   const collectiveChecks = {};
 
@@ -165,30 +161,30 @@ const DiscoverPage = ({ router }) => {
               <NavList as="ul" p={0} m={0} justifyContent="space-around" css="margin-right: 256px;">
                 <Box as="li" px={3}>
                   <Link href="/discover" passHref scroll={false}>
-                    <Nava>
-                      <FormattedMessage id="menu.allCollectives" defaultMessage="All collectives" />
-                    </Nava>
+                    <StyledLink color="black.600">
+                      <FormattedMessage id="menu.allCollectives" defaultMessage="All Collectives" />
+                    </StyledLink>
                   </Link>
                 </Box>
                 <Box as="li" px={3}>
                   <Link href="/discover?offset=0&show=open%20source" passHref scroll={false}>
-                    <Nava>
-                      <FormattedMessage id="menu.openSourceCollectives" defaultMessage="Open source collectives" />
-                    </Nava>
+                    <StyledLink color="black.600">
+                      <FormattedMessage id="menu.openSourceCollectives" defaultMessage="OpenSource Collectives" />
+                    </StyledLink>
                   </Link>
                 </Box>
                 <Box as="li" px={3}>
                   <Link href="/discover?offset=0&show=pledged" passHref scroll={false}>
-                    <Nava>
-                      <FormattedMessage id="menu.pledgedCollective" defaultMessage="Pledged collectives" />
-                    </Nava>
+                    <StyledLink color="black.600">
+                      <FormattedMessage id="menu.pledgedCollective" defaultMessage="Pledged Collectives" />
+                    </StyledLink>
                   </Link>
                 </Box>
                 <Box as="li" px={3}>
                   <Link href="/discover?offset=0&show=other" passHref scroll={false}>
-                    <Nava>
+                    <StyledLink color="black.600">
                       <FormattedMessage id="menu.others" defaultMessage="Others" />
-                    </Nava>
+                    </StyledLink>
                   </Link>
                 </Box>
               </NavList>
